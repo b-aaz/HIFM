@@ -2,9 +2,11 @@
 
 ## Why ? 
 
-Writing HTML is unnecessarily difficult .
+Typing HTML is unnecessarily difficult .
+
 It can be hard to read if not formatted correctly .
-The end tags waist space .
+
+The end tags waste space .
 
 ## Why not Haml ?
 
@@ -12,7 +14,7 @@ Haml was made to be used with ruby .
 
 ## How does it work ?
 
-`cat yourHIFMfile.HIFM | hifm2html.awk > your.html`
+`cat yourHIFMfile.hifm | hifm2html.awk > your.html`
 
 *Note :* This program outputs ugly HTML it is recommended to add a HTML
 formatted (Like [Tidy](https://www.github.com/htacg/tidy-html5)) at the end of the
