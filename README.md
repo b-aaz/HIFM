@@ -127,4 +127,5 @@ What ?
 
 * Comments
 * html2hifm
+* Vim syntax files
 * Docs ?
