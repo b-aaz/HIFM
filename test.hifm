@@ -1,0 +1,53 @@
+!! html
+
+.html
+	.head
+		.script
+			clicked ()
+			{
+			}
+		.style
+			p {
+				color: #888888;
+			}
+			body {
+				background-color: #121888;
+			}
+			.white {
+				color: #FFFFFF;
+			}
+			#formdiv {
+				background-color: aqua;
+				border-radius: 10px
+			}
+			.padded {
+				padding: 1em;
+			}
+			.inline {
+				display: inline-block;
+			} 
+	.body
+		.h1.white
+			HIFM : HTML intended for mortals .
+		.p 
+			this page was made with HIFM BTW .
+		...inline.padded formdiv
+			.form
+			method post
+				.label
+					Password ? :
+				.input
+				name pass
+				type password
+				.br
+				.label
+					User name ? :
+				.input
+				type text
+				name user
+				.br
+				.label
+					Remember ?
+				.input
+				name rem
+				type checkbox
