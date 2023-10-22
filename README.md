@@ -20,7 +20,7 @@ Haml was made to be used with ruby .
 formatted (Like [Tidy](https://www.github.com/htacg/tidy-html5)) at the end of the
 pipeline .
 
-*Do not forget the* `chemod +x` *.*
+*Do not forget the* `chmod +x` *.*
 
 ## An Example .
 
