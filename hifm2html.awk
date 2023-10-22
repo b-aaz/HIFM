@@ -23,6 +23,8 @@ BEGIN {
 	hasnochild = 0
 	# If the current tag is a void tag and does not need a closing tag .
 	noclose = 0
+	# If we are currently parsing a comment .
+	incomment = 0
 }
 
 {
@@ -67,6 +69,12 @@ BEGIN {
 				$1 = ""
 				$0 = $0
 			}
+		} else if (diff == 0 && $0 ~ /^\.e /) {
+			# HIFM supports comments in the attribute list .
+			# We are in one .
+			# HTML does not ...
+			$0 = ""
+			#(So we clear them and do not transfer them to HTML .)
 		} else {
 			# Closes the tag and clears the "intag" flag .
 			print ">\n"
@@ -75,7 +83,12 @@ BEGIN {
 	}
 	# This section handles printing the end tag from the stack .
 	if (! intag && numoftags > 0 && tagsind[numoftags - 1] >= RLENGTH) {
-		print "</" tags[numoftags - 1] ">"
+		if (! incomment) {
+			print "</" tags[numoftags - 1] ">"
+		} else {
+			print "-->"
+			incomment = 0
+		}
 		# Frees the printed tags .
 		delete tags[numoftags - 1]
 		delete tagsind[numoftags - 1]
@@ -94,9 +107,14 @@ BEGIN {
 			$1 = "div" substr($1, 2)
 			$0 = $0
 		}
+		# Comments in HIFM start with ".e" .
+		if ($1 == "e") {
+			$1 = "!--"
+			incomment = 1
+		}
 		# The raw text tags .
-		if ($1 == "style" || $1 == "script" ||
-		    $1 == "textarea" || $1 == "title") {
+		if ($1 == "style" || $1 == "script" || $1 == "textarea" ||
+		    $1 == "title") {
 			hasnochild = 1
 		}
 		# The void tags .
@@ -107,29 +125,32 @@ BEGIN {
 		       $1 == "wbr") {
 			noclose = 1
 		}
-		# This section handles the "class" and "id" attributes .
-		# Because these attributes are used A LOT (Thanks to CSS) they
-		# can be appended to the tag line like this:
-		# .div.aclass anid
-		# This will be transformed to the felowing HTML :
-		# <div id=anid class=aclass> 
-		
-		# If we have an id .
-		if (NF == 2) {
-			$2 = "id=" $2
-		}
-		# Checks to see if there is any dots in the tag name .
-		if (index($1, ".")) {
-			# Replaces all the dots separating the classes with
-			# spaces .
-			gsub("\\.", " ", $1)
-			# Adds a '"' to the end of the list of classes .
-			$1 = $1 "\""
-			# Regenerates the fields so that we have the tag name
-			# on its own at $1 .
-			$0 = $0
-			$1 = $1 " class=\""
-			$0 = $0
+		# Comments do not have any attributes . 
+		if (! incomment) {
+			# This section handles the "class" and "id" attributes
+			# .  Because these attributes are used A LOT (Thanks to
+			# CSS) they can be appended to the tag line like this:
+			# .div.aclass anid
+			# This will be transformed to the felowing HTML :
+			# <div id=anid class=aclass> 
+			
+			# If we have an id .
+			if (NF == 2) {
+				$2 = "id=" $2
+			}
+			# Checks to see if there is any dots in the tag name .
+			if (index($1, ".")) {
+				# Replaces all the dots separating the classes
+				# with spaces .
+				gsub("\\.", " ", $1)
+				# Adds a '"' to the end of the list of classes .
+				$1 = $1 "\""
+				# Regenerates the fields so that we have the
+				# tag name on its own at $1 .
+				$0 = $0
+				$1 = $1 " class=\""
+				$0 = $0
+			}
 		}
 		# If the tag is not a void tag save the tag name and indent
 		# level to the tags stack .
@@ -144,7 +165,11 @@ BEGIN {
 			noclose = 0
 		}
 		$0 = "<" $0
-		intag = 1
+		# Comments do not have any attributes . So we won't go looking
+		# for them .
+		if (! incomment) {
+			intag = 1
+		}
 	}
 	print $0
 	lastRLENGTH = RLENGTH
@@ -161,3 +186,4 @@ END {
 		print "</" tags[numoftags] ">"
 	}
 }
+

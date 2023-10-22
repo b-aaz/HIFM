@@ -26,8 +26,14 @@ This HIFM code :
 
     !! html
 
+    .e A comment !
+        comments in HIFM start with a .e
     .html
         .head
+            .script
+                clicked ()
+                {
+                }
             .style
                 p {
                     color: #888888;
@@ -53,6 +59,11 @@ This HIFM code :
                 HIFM : HTML intended for mortals .
             .p 
                 this page was made with HIFM BTW .
+            .e This is
+                a 
+                multi
+                line
+                comment
             ...inline.padded formdiv
                 .form
                 method post
@@ -65,6 +76,7 @@ This HIFM code :
                     .label
                         User name ? :
                     .input
+                    .e You can comment attributes in HIFM .
                     type text
                     name user
                     .br
@@ -77,8 +89,17 @@ This HIFM code :
 Will be converted to this HTML (After Tidy):
 
     <!DOCTYPE html>
+    <!-- A comment !
+    comments in HIFM start with a .e
+    -->
     <html>
     <head>
+      <script>
+
+      clicked ()
+      {
+      }
+      </script>
       <style>
 
       p {
@@ -104,7 +125,12 @@ Will be converted to this HTML (After Tidy):
     </head>
     <body>
       <h1 class="white">HIFM : HTML intended for mortals .</h1>
-      <p>this page was made with HIFM BTW .</p>
+      <p>this page was made with HIFM BTW .</p><!-- This is
+    a 
+    multi
+    line
+    comment
+    -->
       <div class="inline padded" id="formdiv">
         <form method="post">
           <label>Password ? :</label> <input name="pass" type=

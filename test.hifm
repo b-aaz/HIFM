@@ -1,5 +1,7 @@
 !! html
 
+.e A comment !
+	comments in HIFM start with a .e
 .html
 	.head
 		.script
@@ -31,6 +33,11 @@
 			HIFM : HTML intended for mortals .
 		.p 
 			this page was made with HIFM BTW .
+		.e This is
+			a 
+			multi
+			line
+			comment
 		...inline.padded formdiv
 			.form
 			method post
@@ -43,6 +50,7 @@
 				.label
 					User name ? :
 				.input
+				.e You can comment attributes in HIFM .
 				type text
 				name user
 				.br
