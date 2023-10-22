@@ -151,7 +151,6 @@ What ?
 
 ## TODOs:
 
-* Comments
 * html2hifm
 * Vim syntax files
 * Docs ?
