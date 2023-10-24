@@ -98,47 +98,51 @@ BEGIN {
 	# This section handles parsing and adding the tags to the stack .
 	if (! hasnochild && $0 ~ /^\./) {
 		# Cuts the '.' at the start of the tag .
-		$0 = substr($0, 2)
+		$0=substr($0, 2)
+		# Extracting the tag name from the tag name+the classes group .
+		split ($1,a,".")
+		tag = a[1]
+		delete a
+
 		# HTML divs are used A LOT so they can be written as a
-		# single '.' for convenience .
-		if ($1 ~ /^\./) {
-			# Cuts the '.' (The short hand for div) and replaces it
-			# with "div" .
-			$1 = "div" substr($1, 2)
+		# single 'd' for convenience .
+		if (tag=="d") {
+			# Replaces the 'd' with "div" .
+			tag = "div"
 			$0 = $0
 		}
 		# Comments in HIFM start with ".e" .
-		if ($1 == "e") {
-			$1 = "!--"
+		if (tag == "e") {
+			tag = "!--"
 			incomment = 1
 		}
 		# The raw text tags .
-		if ($1 == "style" || $1 == "script" || $1 == "textarea" ||
-		    $1 == "title") {
+		if (tag == "style" || tag == "script" || tag == "textarea" ||
+		    tag == "title") {
 			hasnochild = 1
 		}
 		# The void tags .
-		if ($1 == "area" || $1 == "base" || $1 == "br" ||
-		       $1 == "col" || $1 == "embed" || $1 == "hr" ||
-		       $1 == "img" || $1 == "input" || $1 == "link" ||
-		       $1 == "meta" || $1 == "source" || $1 == "track" ||
-		       $1 == "wbr") {
+		if (tag == "area" || tag == "base" || tag == "br" ||
+		       tag == "col" || tag == "embed" || tag == "hr" ||
+		       tag == "img" || tag == "input" || tag == "link" ||
+		       tag == "meta" || tag == "source" || tag == "track" ||
+		       tag == "wbr") {
 			noclose = 1
 		}
 		# Comments do not have any attributes . 
-		if (! incomment) {
+		if (!incomment) {
 			# This section handles the "class" and "id" attributes
 			# .  Because these attributes are used A LOT (Thanks to
 			# CSS) they can be appended to the tag line like this:
 			# .div.aclass anid
-			# This will be transformed to the felowing HTML :
+			# This will be transformed to the following HTML :
 			# <div id=anid class=aclass> 
 			
 			# If we have an id .
 			if (NF == 2) {
 				$2 = "id=" $2
 			}
-			# Checks to see if there is any dots in the tag name .
+			# Checks to see if there is any dots in the first field .
 			if (index($1, ".")) {
 				# Replaces all the dots separating the classes
 				# with spaces .
@@ -152,6 +156,10 @@ BEGIN {
 				$0 = $0
 			}
 		}
+		# After removing the classes group the tag name is on it own now
+		# so we sync the tag with the record
+		$1=tag 
+		$0=$0
 		# If the tag is not a void tag save the tag name and indent
 		# level to the tags stack .
 		if (! noclose) {

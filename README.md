@@ -66,7 +66,7 @@ This HIFM code :
                 multi
                 line
                 comment
-            ...inline.padded formdiv
+            .d.inline.padded formdiv
                 .form
                 method post
                     .label
