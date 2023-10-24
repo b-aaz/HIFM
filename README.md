@@ -147,7 +147,7 @@ Will be converted to this HTML (After Tidy):
 
 ## Docs ?
 
-What ?
+[What ?](DOCS.md)
 
 ## TODOs:
 
